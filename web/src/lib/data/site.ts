@@ -1,3 +1,6 @@
+import {derived} from 'svelte/store';
+import {createLatestRelease, fileOf, type Release} from './releases';
+
 /**
  * Everything the home page says, as data. The source of truth is the
  * wasisabi README; when it changes, this file is what follows it.
@@ -12,15 +15,28 @@ export const links = {
 	agentNotes: 'https://github.com/wighawag/wasisabi/blob/main/notes/agents.md',
 };
 
-// The published image. A pre-release, so GitHub's /releases/latest does not
-// point at it: link the exact version, and bump it here on each release.
-export const release = {
+// What can be downloaded. Live from the release bucket (see releases.ts);
+// until it answers, or if it never does, the page shows this: the netinstall
+// ISO attached to the v0.1.0 GitHub release.
+export const fallbackRelease: Release = {
 	version: '0.1.0',
-	iso: 'https://github.com/wighawag/wasisabi/releases/download/v0.1.0/wasisabi-netinstall.iso',
-	sha256: 'https://github.com/wighawag/wasisabi/releases/download/v0.1.0/wasisabi-netinstall.iso.sha256',
-	page: 'https://github.com/wighawag/wasisabi/releases/tag/v0.1.0',
-	size: '1.56 GB',
+	date: '2026-09-29',
+	files: [
+		{
+			name: 'wasisabi-netinstall.iso',
+			kind: 'netinstall',
+			size: 1557233664,
+			sha256: '414dfb5e58a805eefb9a3a82030b679794714bb8655ec1e037e4d74dcab7b11a',
+			url: 'https://github.com/wighawag/wasisabi/releases/download/v0.1.0/wasisabi-netinstall.iso',
+		},
+	],
+	sums: 'https://github.com/wighawag/wasisabi/releases/download/v0.1.0/SHA256SUMS',
+	notes: 'https://github.com/wighawag/wasisabi/releases/tag/v0.1.0',
 };
+
+export const latestRelease = createLatestRelease(fallbackRelease);
+export const netinstall = derived(latestRelease, (r) => fileOf(r, 'netinstall'));
+export const offline = derived(latestRelease, (r) => fileOf(r, 'offline'));
 
 export const nav = [
 	{href: '#rules', label: 'Principles'},
@@ -53,7 +69,7 @@ export const principles = [
 	},
 	{
 		title: 'Easy to leave',
-		body: 'Remove the two module imports and you have a working NixOS machine that has never heard of wasi-sabi. Not a distro: the modules are the product.',
+		body: 'Remove the two module imports and you have a working NixOS machine that has never heard of wasisabi. Not a distro: the modules are the product.',
 	},
 ];
 
@@ -116,12 +132,12 @@ export const anon = {
 };
 
 export const install = {
-	flash: `sha256sum -c wasisabi-netinstall.iso.sha256
+	flash: `sha256sum -c --ignore-missing SHA256SUMS
 sudo dd if=wasisabi-netinstall.iso of=/dev/sdX bs=4M status=progress oflag=sync
 # boot the stick, then:
 sudo wasisabi-install`,
 	live: `nix build github:wighawag/wasisabi#iso-offline
-# write result/iso/*.iso to a USB stick (9.2 GB), boot it`,
+# write result/iso/*.iso to a USB stick, boot it`,
 	repo: `cd ~/nixos && $EDITOR configuration.nix
 sudo nixos-rebuild switch
 git commit -am "..." && git push`,
@@ -143,7 +159,7 @@ sudo nixos-rebuild switch --flake ~/nixos`,
 export const installSteps = [
 	{
 		title: 'Boot the installer',
-		body: 'Write the ISO to a USB stick and boot it on a UEFI machine with a network. Or build the live ISO, which boots straight into the desktop so you can try it before anything touches the disk.',
+		body: 'Write an ISO to a USB stick and boot it on a UEFI machine. The live ISO boots straight into the desktop, so you can try it before anything touches the disk; the netinstall one is smaller and fetches the rest.',
 	},
 	{
 		title: 'Answer a few questions',

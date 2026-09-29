@@ -5,9 +5,12 @@
 	import SectionHeading from '$lib/components/site/SectionHeading.svelte';
 	import CodeBlock from '$lib/components/site/CodeBlock.svelte';
 	import {url} from '$lib/kit/paths';
+	import {formatSize} from '$lib/data/releases';
 	import {
 		links,
-		release,
+		latestRelease,
+		netinstall,
+		offline,
 		rules,
 		principles,
 		stack,
@@ -55,7 +58,7 @@
 			<SectionHeading
 				kicker="Not a distro"
 				title="The modules are the product."
-				intro="An ISO is only a shortcut that installs them. No knowledge of wasi-sabi is needed to use the system, or to leave it."
+				intro="An ISO is only a shortcut that installs them. No knowledge of wasisabi is needed to use the system, or to leave it."
 			/>
 			<div class="mt-16 grid gap-px overflow-hidden rounded-xl bg-ink-700/60 md:grid-cols-3">
 				{#each principles as p (p.title)}
@@ -181,30 +184,55 @@
 				intro="Boot the installer, answer a few questions, and what you are left with is a flake you own."
 			/>
 
-			<div
-				class="mt-12 flex flex-col gap-6 rounded-xl border border-ink-700 bg-ink-900/60 p-8 sm:flex-row sm:items-center sm:justify-between"
-			>
-				<div>
-					<p class="font-mono text-xs tracking-[0.25em] text-ash uppercase">
-						v{release.version} &middot; preview
-					</p>
-					<p class="mt-2 text-xl text-paper-light">wasisabi-netinstall.iso</p>
-					<p class="mt-1 text-sm text-paper-dim">
-						{release.size}, text installer, needs a network and UEFI.
-						<a class="underline decoration-ink-600 underline-offset-4 hover:text-paper" href={release.sha256}
-							>sha256</a
-						>
-						&middot;
-						<a class="underline decoration-ink-600 underline-offset-4 hover:text-paper" href={release.page}
-							>release notes</a
-						>
-					</p>
+			<div class="mt-12 rounded-xl border border-ink-700 bg-ink-900/60 p-8">
+				<p class="font-mono text-xs tracking-[0.25em] text-ash uppercase">
+					v{$latestRelease.version} &middot; preview
+				</p>
+				<div class="mt-6 grid gap-6 {$offline ? 'md:grid-cols-2' : ''}">
+					{#if $offline}
+						<div class="flex flex-col justify-between gap-4">
+							<div>
+								<p class="text-xl text-paper-light">Live ISO</p>
+								<p class="mt-1 text-sm text-paper-dim">
+									{formatSize($offline.size)}. Boots into the desktop to try it, then installs with
+									no network.
+								</p>
+							</div>
+							<a
+								href={$offline.url}
+								class="self-start rounded-md bg-seal px-6 py-3 text-center font-medium text-paper-light transition hover:bg-seal-light"
+								>Download the live ISO</a
+							>
+						</div>
+					{/if}
+					{#if $netinstall}
+						<div class="flex flex-col justify-between gap-4">
+							<div>
+								<p class="text-xl text-paper-light">Netinstall ISO</p>
+								<p class="mt-1 text-sm text-paper-dim">
+									{formatSize($netinstall.size)}. A text installer that downloads the rest; needs a
+									network.
+								</p>
+							</div>
+							<a
+								href={$netinstall.url}
+								class="self-start rounded-md px-6 py-3 text-center font-medium transition {$offline
+									? 'border border-paper/30 text-paper-light hover:border-paper/70'
+									: 'bg-seal text-paper-light hover:bg-seal-light'}">Download the netinstall ISO</a
+							>
+						</div>
+					{/if}
 				</div>
-				<a
-					href={release.iso}
-					class="shrink-0 rounded-md bg-seal px-6 py-3 text-center font-medium text-paper-light transition hover:bg-seal-light"
-					>Download the ISO</a
-				>
+				<p class="mt-6 text-sm text-ash">
+					UEFI only.
+					<a class="underline decoration-ink-600 underline-offset-4 hover:text-paper" href={$latestRelease.sums}
+						>SHA256SUMS</a
+					>
+					&middot;
+					<a class="underline decoration-ink-600 underline-offset-4 hover:text-paper" href={$latestRelease.notes}
+						>release notes</a
+					>
+				</p>
 			</div>
 
 			<ol class="mt-16 grid gap-10 md:grid-cols-3">
@@ -223,10 +251,9 @@
 					<CodeBlock code={install.flash} />
 				</div>
 				<div class="space-y-3">
-					<h3 class="text-lg text-paper-light">Or try it live first</h3>
+					<h3 class="text-lg text-paper-light">Or build an ISO yourself</h3>
 					<p class="text-sm leading-relaxed text-paper-dim">
-						The live ISO boots into the desktop and installs with no network. It is too large to
-						host yet, so build it:
+						Any version, from its tag: the same image, from source.
 					</p>
 					<CodeBlock code={install.live} />
 				</div>
@@ -297,7 +324,7 @@
 				<a
 					href="#install"
 					class="mt-8 inline-block rounded-md bg-seal px-6 py-3 font-medium text-paper-light transition hover:bg-seal-light"
-					>Install wasi-sabi</a
+					>Install wasisabi</a
 				>
 			</div>
 		</div>
@@ -310,7 +337,7 @@
 	>
 		<div class="flex flex-wrap items-center gap-x-3 gap-y-1">
 			<img src={url('/enso.svg')} alt="" class="h-7 w-7" />
-			<span class="font-serif text-lg whitespace-nowrap text-paper-light">wasi-sabi</span>
+			<span class="font-serif text-lg whitespace-nowrap text-paper-light">wasisabi</span>
 			<span class="w-full text-sm text-ash sm:w-auto">Open source only. Nothing to sign up for.</span>
 		</div>
 		<div class="flex gap-6 text-sm text-paper-dim">

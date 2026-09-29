@@ -1,8 +1,8 @@
 {
-	"name": "wasi-sabi",
-	"title": "wasi-sabi: a libre-only Wayland desktop you own",
+	"name": "wasisabi",
+	"title": "wasisabi: a libre-only Wayland desktop you own",
 	"description": "An opinionated, libre-only Wayland desktop for NixOS, shipped as modules. Every default is an option, the install is an ordinary flake you own, and nothing needs an account.",
-	"canonicalURL": "https://wighawag.github.io/wasisabi-website",
+	"canonicalURL": "https://wasisabi.org",
 	"ENSName": null,
 	"themeColor": "#182329",
 	"appleStatusBarStyle": "black-translucent",
