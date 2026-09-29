@@ -7,6 +7,7 @@
 	import {url} from '$lib/kit/paths';
 	import {
 		links,
+		release,
 		rules,
 		principles,
 		stack,
@@ -176,9 +177,35 @@
 		<div class="mx-auto max-w-6xl px-6 py-24 sm:py-32">
 			<SectionHeading
 				kicker="Install"
-				title="Try it first. Then keep the repo."
-				intro="Boot the live ISO, look around, and install when you are ready. What you are left with is a flake you own."
+				title="Install it. Then keep the repo."
+				intro="Boot the installer, answer a few questions, and what you are left with is a flake you own."
 			/>
+
+			<div
+				class="mt-12 flex flex-col gap-6 rounded-xl border border-ink-700 bg-ink-900/60 p-8 sm:flex-row sm:items-center sm:justify-between"
+			>
+				<div>
+					<p class="font-mono text-xs tracking-[0.25em] text-ash uppercase">
+						v{release.version} &middot; preview
+					</p>
+					<p class="mt-2 text-xl text-paper-light">wasisabi-netinstall.iso</p>
+					<p class="mt-1 text-sm text-paper-dim">
+						{release.size}, text installer, needs a network and UEFI.
+						<a class="underline decoration-ink-600 underline-offset-4 hover:text-paper" href={release.sha256}
+							>sha256</a
+						>
+						&middot;
+						<a class="underline decoration-ink-600 underline-offset-4 hover:text-paper" href={release.page}
+							>release notes</a
+						>
+					</p>
+				</div>
+				<a
+					href={release.iso}
+					class="shrink-0 rounded-md bg-seal px-6 py-3 text-center font-medium text-paper-light transition hover:bg-seal-light"
+					>Download the ISO</a
+				>
+			</div>
 
 			<ol class="mt-16 grid gap-10 md:grid-cols-3">
 				{#each installSteps as step, i (step.title)}
@@ -191,9 +218,17 @@
 			</ol>
 
 			<div class="mt-16 grid gap-8 lg:grid-cols-2 [&>*]:min-w-0">
-				<div class="space-y-3 lg:col-span-2">
-					<h3 class="text-lg text-paper-light">Build the ISO and install</h3>
-					<CodeBlock code={install.iso} />
+				<div class="space-y-3">
+					<h3 class="text-lg text-paper-light">Check it, write it, install</h3>
+					<CodeBlock code={install.flash} />
+				</div>
+				<div class="space-y-3">
+					<h3 class="text-lg text-paper-light">Or try it live first</h3>
+					<p class="text-sm leading-relaxed text-paper-dim">
+						The live ISO boots into the desktop and installs with no network. It is too large to
+						host yet, so build it:
+					</p>
+					<CodeBlock code={install.live} />
 				</div>
 				<div class="space-y-3">
 					<h3 class="text-lg text-paper-light">Then the machine is the repo</h3>
@@ -262,7 +297,7 @@
 				<a
 					href="#install"
 					class="mt-8 inline-block rounded-md bg-seal px-6 py-3 font-medium text-paper-light transition hover:bg-seal-light"
-					>Try the live ISO</a
+					>Install wasi-sabi</a
 				>
 			</div>
 		</div>

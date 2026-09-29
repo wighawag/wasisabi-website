@@ -12,6 +12,16 @@ export const links = {
 	agentNotes: 'https://github.com/wighawag/wasisabi/blob/main/notes/agents.md',
 };
 
+// The published image. A pre-release, so GitHub's /releases/latest does not
+// point at it: link the exact version, and bump it here on each release.
+export const release = {
+	version: '0.1.0',
+	iso: 'https://github.com/wighawag/wasisabi/releases/download/v0.1.0/wasisabi-netinstall.iso',
+	sha256: 'https://github.com/wighawag/wasisabi/releases/download/v0.1.0/wasisabi-netinstall.iso.sha256',
+	page: 'https://github.com/wighawag/wasisabi/releases/tag/v0.1.0',
+	size: '1.56 GB',
+};
+
 export const nav = [
 	{href: '#rules', label: 'Principles'},
 	{href: '#stack', label: 'Stack'},
@@ -106,10 +116,12 @@ export const anon = {
 };
 
 export const install = {
-	iso: `nix build github:wighawag/wasisabi#iso-offline      # live: try it first, installs with no network
-nix build github:wighawag/wasisabi#iso-netinstall   # small, needs a network
-# write result/iso/*.iso to a USB stick, boot it, then:
+	flash: `sha256sum -c wasisabi-netinstall.iso.sha256
+sudo dd if=wasisabi-netinstall.iso of=/dev/sdX bs=4M status=progress oflag=sync
+# boot the stick, then:
 sudo wasisabi-install`,
+	live: `nix build github:wighawag/wasisabi#iso-offline
+# write result/iso/*.iso to a USB stick (9.2 GB), boot it`,
 	repo: `cd ~/nixos && $EDITOR configuration.nix
 sudo nixos-rebuild switch
 git commit -am "..." && git push`,
@@ -130,8 +142,8 @@ sudo nixos-rebuild switch --flake ~/nixos`,
 
 export const installSteps = [
 	{
-		title: 'Try it live',
-		body: 'The offline ISO boots straight into the desktop from the stick, so you can try the machine before anything touches its disk. A welcome terminal says what to try and holds the install command.',
+		title: 'Boot the installer',
+		body: 'Write the ISO to a USB stick and boot it on a UEFI machine with a network. Or build the live ISO, which boots straight into the desktop so you can try it before anything touches the disk.',
 	},
 	{
 		title: 'Answer a few questions',

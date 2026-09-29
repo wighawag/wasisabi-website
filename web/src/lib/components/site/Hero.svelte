@@ -38,7 +38,7 @@
 					href="#install"
 					class="rounded-md bg-seal px-6 py-3 font-medium text-paper-light shadow-lg shadow-ink-950/40 transition hover:bg-seal-light"
 				>
-					Try the live ISO
+					Install wasi-sabi
 				</a>
 				<a
 					href={links.repo}
