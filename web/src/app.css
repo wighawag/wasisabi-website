@@ -2,6 +2,66 @@
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
 
+/* The palette is sampled from the default wallpaper (the enso risograph):
+   indigo ink on warm paper, and nothing else. The one exception is `seal`,
+   the vermilion of a hanko stamp, which marks the single action a section
+   asks for and is worn by nothing decorative. */
+@theme {
+	--color-ink-950: #0e1519;
+	--color-ink-900: #131c21;
+	--color-ink: #182329;
+	--color-ink-800: #1f2c33;
+	--color-ink-700: #2a3a44;
+	--color-ink-600: #38454d;
+	--color-stone: #5a6163;
+	--color-ash: #a59e92;
+	--color-paper-dim: #c8b9a4;
+	--color-paper: #e4d0b5;
+	--color-paper-light: #f4e1c3;
+	--color-seal: #b8452f;
+	--color-seal-light: #cf5a42;
+
+	--font-serif: 'Fraunces Variable', ui-serif, Georgia, serif;
+	--font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+	--font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+}
+
+@layer base {
+	html {
+		scroll-behavior: smooth;
+		scroll-padding-top: 5rem;
+	}
+	body {
+		@apply bg-ink font-sans text-paper antialiased;
+	}
+	::selection {
+		@apply bg-paper text-ink;
+	}
+	h1,
+	h2,
+	h3 {
+		font-family: var(--font-serif);
+		/* Fraunces' SOFT axis rounds the terminals: ink that spread a little
+		   into the paper, rather than a sharp engraved cut. */
+		font-variation-settings:
+			'SOFT' 100,
+			'WONK' 0;
+	}
+}
+
+/* Risograph grain over the whole page, so flat colour reads as printed
+   paper like the wallpaper does. Pure CSS/SVG, no image request. */
+.grain::after {
+	content: '';
+	position: fixed;
+	inset: 0;
+	pointer-events: none;
+	z-index: 50;
+	opacity: 0.09;
+	mix-blend-mode: overlay;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1.4 -0.35'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
 /* @tailwindcss/typography 0.5.20 (with Tailwind v4) drops the standard
    max-width/height rule for .prose img, so inline markdown images render
    at their natural width and escape the .prose container.

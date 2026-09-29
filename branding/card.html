@@ -1,0 +1,95 @@
+<!doctype html>
+<!-- Source of web/static/preview.jpg (1280x640), rendered by card.mjs. Uses the
+     site's own fonts and wallpaper, so the card cannot drift from the site. -->
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<style>
+			@font-face {
+				font-family: 'Fraunces';
+				src: url('../web/node_modules/@fontsource-variable/fraunces/files/fraunces-latin-full-normal.woff2')
+					format('woff2-variations');
+				font-weight: 100 900;
+			}
+			@font-face {
+				font-family: 'JetBrains Mono';
+				src: url('../web/node_modules/@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2')
+					format('woff2-variations');
+				font-weight: 100 800;
+			}
+			html,
+			body {
+				margin: 0;
+				width: 1280px;
+				height: 640px;
+				overflow: hidden;
+				background: #182329;
+			}
+			.bg {
+				position: absolute;
+				inset: 0;
+				background: url('../web/static/img/enso-wall.webp') 85% 50% / cover no-repeat;
+			}
+			.shade {
+				position: absolute;
+				inset: 0;
+				background: linear-gradient(90deg, rgba(24, 35, 41, 0.97) 0%, rgba(24, 35, 41, 0.75) 45%, rgba(24, 35, 41, 0) 80%);
+			}
+			.content {
+				position: absolute;
+				left: 96px;
+				top: 0;
+				bottom: 0;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				color: #e4d0b5;
+			}
+			.brand {
+				display: flex;
+				align-items: center;
+				gap: 22px;
+			}
+			.brand img {
+				width: 84px;
+				height: 84px;
+			}
+			.word {
+				font-family: 'Fraunces';
+				font-weight: 300;
+				font-variation-settings: 'SOFT' 100;
+				font-size: 96px;
+				letter-spacing: 0.01em;
+				color: #f4e1c3;
+			}
+			.tag {
+				margin-top: 28px;
+				font-family: 'Fraunces';
+				font-weight: 300;
+				font-variation-settings: 'SOFT' 100;
+				font-size: 40px;
+				color: #e4d0b5;
+			}
+			.kicker {
+				margin-top: 36px;
+				font-family: 'JetBrains Mono';
+				font-size: 18px;
+				letter-spacing: 0.25em;
+				text-transform: uppercase;
+				color: #a59e92;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="bg"></div>
+		<div class="shade"></div>
+		<div class="content">
+			<div class="brand">
+				<img src="enso.svg" alt="" />
+				<span class="word">wasi-sabi</span>
+			</div>
+			<div class="tag">A desktop that stays yours.</div>
+			<div class="kicker">NixOS modules &middot; Wayland &middot; libre only</div>
+		</div>
+	</body>
+</html>

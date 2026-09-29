@@ -23,6 +23,7 @@
     "---------------------- DEV ----------------------": "",
     "web:dev": "ldenv pnpm --filter ./web dev",
     "web:build": "ldenv pnpm --filter ./web build",
+    "branding": "node branding/build.mjs && node branding/card.mjs && pnpm --filter ./web generate-pwa-icons-and-tags",
     "---------------------- TEST ----------------------": "",
     "web:check": "pnpm --filter ./web check",
     "web:test": "pnpm --filter ./web test",

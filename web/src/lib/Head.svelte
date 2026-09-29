@@ -15,7 +15,7 @@
 	const host = canonicalURL.endsWith('/')
 		? canonicalURL.slice(0, -1)
 		: canonicalURL;
-	const previewImage = host + '/preview.png';
+	const previewImage = host + '/preview.jpg';
 
 	interface Props {
 		type?: 'website' | 'article';
