@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Notifications from '$lib/core/notifications/Notifications.svelte';
-	import VersionAndInstallNotfications from '$lib/core/service-worker/VersionAndInstallNotfications.svelte';
+	import UpdateNotice from '$lib/components/site/UpdateNotice.svelte';
 	import NavigationProgress from '$lib/components/NavigationProgress.svelte';
 	import {notifications, serviceWorker} from '$lib';
 	import {navigating} from '$app/state';
@@ -19,4 +19,4 @@
 
 <Notifications {notifications} />
 
-<VersionAndInstallNotfications {serviceWorker} />
+<UpdateNotice {serviceWorker} />
